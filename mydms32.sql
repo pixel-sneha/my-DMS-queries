@@ -34,3 +34,27 @@ SELECT students.name AS student_name, grades.course_id, grades.student_id,grades
 FROM grades
 JOIN students ON students.id = grades.student_id
 ORDER BY grade;
+--same results without using join function
+SELECT students.name AS student_name , grades.grade, grades.course_id,students.id 
+FROM grades, students
+WHERE students.id = grades.student_id;
+
+
+--Calculate for each student their average grade and return the name and the average grade for each.
+--Name the columns student, grade.
+--Round the average to 2 decimal places and sort the result by the average grade in ascending order.
+SELECT students.name AS student, grades.avg_grade AS grade
+FROM students, (SELECT student_id,ROUND(AVG(grade),2) AS avg_grade FROM grades GROUP BY student_id) AS grades
+WHERE students.id = grades.student_id
+ORDER BY avg_grade;
+
+--Find the customer IDs of customers who have ordered products with a unit price less than 10,
+--and list the total quantity of those cheap products each customer has ordered.
+SELECT
+    orders.customer_id,
+    SUM(order_items.quantity) AS total_quantity
+FROM orders
+INNER JOIN order_items ON orders.id = order_items.order_id
+INNER JOIN products ON order_items.product_id = products.id
+WHERE products.unit_price < 10
+GROUP BY orders.customer_id;

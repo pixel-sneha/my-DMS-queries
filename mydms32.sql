@@ -26,3 +26,11 @@ AND (shade = 'dark' OR (shade = 'light' AND density/diameter_wide > 0.01))
 GROUP BY brand
 HAVING avg_density < 0.8
 ORDER BY avg_density
+
+
+--Create a query that fetches student_name, course_id, student_id and grade in one table. 
+--Order the result by grade in ascending order.
+SELECT students.name AS student_name, grades.course_id, grades.student_id,grades.grade
+FROM grades
+JOIN students ON students.id = grades.student_id
+ORDER BY grade;

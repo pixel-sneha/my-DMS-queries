@@ -17,3 +17,18 @@ with large_devices as (
 )
 select avg(score) as average_score 
 from large_devices;
+
+--A device's quality is measured by (width/height)*num_features.
+--Fetch all of the devices where the device's opinion is greater than the average quality and the device's score is less than the average quality. Return only the device_id.
+--use the WITH clause
+WITH avg_quality AS (
+    SELECT AVG((width * 1.0 / height) * num_features) AS avg_q
+    FROM devices_specs
+)
+SELECT ds.device_id
+FROM devices_specs ds
+JOIN devices_score dsc 
+  ON ds.device_id = dsc.device_id
+WHERE ds.opinion > (SELECT avg_q FROM avg_quality)
+  AND dsc.score   < (SELECT avg_q FROM avg_quality);
+

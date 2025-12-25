@@ -3,7 +3,7 @@
 --Keep only the parts that have a quality value greater than the average quality.
 --Return part_id and quality
 
-ELECT part_id, ((rpm * adjusted_watt) / size) as quality
+SELECT part_id, ((rpm * adjusted_watt) / size) as quality
 FROM (
     SELECT part_id, rpm, watt + (select avg(watt) from enom_gilpane) as adjusted_watt, size
     FROM enom_gilpane

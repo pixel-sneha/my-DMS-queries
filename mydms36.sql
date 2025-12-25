@@ -1,3 +1,5 @@
+--imaginary products challenge
+
 WITH filtered_enom_gilpane_quality as (    
     WITH enom_gilpane_quality as (    
         SELECT part_id, ((rpm * watt) / size) as quality

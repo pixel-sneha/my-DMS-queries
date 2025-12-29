@@ -17,3 +17,14 @@ Select id,
 from plants
 where hue > 0.34
 order by id;
+
+--A factory is building doors. It needs to number the doors for each country and color combination that have a publication_year smaller than 2000. Name this column row_num.
+--The doors should be numbered within each group in ascending order by their id. Doors without specs should be ignored. Sort the final result in ascending order by the id. 
+select doors.id,doors_specs.country, doors_specs.color,
+row_number() over(partition by country,color order by doors_specs.id asc) as row_num 
+from doors_specs
+join doors on 
+doors_specs.id = doors.id 
+where publication_year < 2000
+order by doors_specs.id asc;
+

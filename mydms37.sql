@@ -37,3 +37,15 @@ from doors_specs ds
 join doors d on
 ds.id = d.id
 order by ds.country;
+
+--Write a query that shows each air conditioner's efficiency along with the efficiency of the previous air conditioner installed (based on id). 
+--Also, calculate the efficiency difference between the current and previous air conditioner. 
+--Order the result by id and efficiency in ascending order.
+
+select * from ( select id, efficiency,
+lag(efficiency) over (order by id) as previous_efficiency,
+efficiency - lag(efficiency) over (order by id) as efficiency_difference
+from air_conditioners)
+where previous_efficiency !=0
+order by id, efficiency;
+

@@ -28,3 +28,12 @@ doors_specs.id = doors.id
 where publication_year < 2000
 order by doors_specs.id asc;
 
+--Write a SQL query to analyze the sequence of door colors within each country, ordered by publication year.
+--For each door space, show: The country,The color,The publication year
+--A number representing the order of colors within each country based on publication year. Call this column color_sequence_number
+select ds.country, ds.color, d.publication_year,
+row_number() over(partition by ds.country order by d.publication_year) as color_sequence_number
+from doors_specs ds 
+join doors d on
+ds.id = d.id
+order by ds.country;

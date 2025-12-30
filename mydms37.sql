@@ -49,3 +49,21 @@ from air_conditioners)
 where previous_efficiency !=0
 order by id, efficiency;
 
+--For each air conditioner in each month, calculate its performance ratio by dividing efficiency by strength
+--Compare each air conditioner's current month performance with its performance two months later
+--Find cases where the current performance is significantly better than future performance (current ratio ÷ future ratio > 0.5)
+--Return the air conditioner id, month, and the comparison ratio for these cases
+WITH cond_avg AS (
+    SELECT id, month, AVG(efficiency)/AVG(strength) as ratio
+    FROM air_conditioners
+    GROUP BY id, month
+),
+final_calc AS (
+    SELECT id, month, ratio, LEAD(ratio, 2) OVER (PARTITION BY id ORDER BY month) as next_two_ratio
+    FROM cond_avg
+)
+SELECT id, month, ratio/next_two_ratio as ratio_two_months
+FROM final_calc
+WHERE ratio/next_two_ratio > 0.5
+
+

@@ -16,3 +16,27 @@ avg(words) over(partition by book) as avg_words_per_page,
 words - avg(words) over(partition by book) as diff_from_avg
 from books
 order by book, page
+
+--we have newspapers for production. We would like to know the average newspapers that were printed two days before the current row and one day after.
+--Also, we would like to know the difference between the maximum and minimum number of newspapers printed from the current date and all three days before it. 
+--Call these columns avg_newspapers and diff_newspapers respectively.
+with diff_news as(
+    select date,
+    avg(num_newspapers) over (
+    order by date
+    rows between 2 preceding and 1 following
+    ) as avg_newspapers,
+     max(num_newspapers) over (
+        order by date
+        rows between 3 preceding and current row
+    ) as max_newspapers,
+    min(num_newspapers) over (
+        order by date
+        rows between 3 preceding and current row
+    ) as min_newspapers
+    from newspapers
+)
+select date,
+avg_newspapers,
+max_newspapers - min_newspapers as diff_newspapers
+from diff_news
